@@ -15,12 +15,24 @@ def calculate_iou(prediction_box, gt_box):
         returns:
             float: value of the intersection of union for the two boxes.
     """
-    # YOUR CODE HERE
 
-    # Compute intersection
+    # coordinates of intersection box
+    xmin = max(prediction_box[0], gt_box[0])
+    ymin = max(prediction_box[1], gt_box[1])
+    xmax = min(prediction_box[2], gt_box[2])
+    ymax = min(prediction_box[3], gt_box[3])
+
+    intersection_area = (xmax-xmin) * (ymax-ymin)
+
+    if xmax<xmin or ymax<ymin:
+        return 0.0
 
     # Compute union
-    iou = 0
+    prediction_box_area = (prediction_box[2]-prediction_box[0]) * (prediction_box[3]-prediction_box[1])
+    gt_box_area = (gt_box[2]-gt_box[0]) * (gt_box[3]-gt_box[1])
+    union = prediction_box_area + gt_box_area - intersection_area
+
+    iou = intersection_area / union
     assert iou >= 0 and iou <= 1
     return iou
 
@@ -36,7 +48,10 @@ def calculate_precision(num_tp, num_fp, num_fn):
     Returns:
         float: value of precision
     """
-    raise NotImplementedError
+    if num_tp+num_fp == 0:
+        return 1.0
+    
+    return num_tp / (num_tp + num_fp)
 
 
 def calculate_recall(num_tp, num_fp, num_fn):
@@ -49,7 +64,10 @@ def calculate_recall(num_tp, num_fp, num_fn):
     Returns:
         float: value of recall
     """
-    raise NotImplementedError
+    if num_tp+num_fn == 0:
+        return 0.0
+
+    return num_tp / (num_tp + num_fn)
 
 
 def get_all_box_matches(prediction_boxes, gt_boxes, iou_threshold):
