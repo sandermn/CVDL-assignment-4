@@ -193,23 +193,25 @@ def get_precision_recall_curve(all_prediction_boxes, all_gt_boxes, confidence_sc
     confidence_thresholds = np.linspace(0, 1, 500)
     # YOUR CODE HERE
 
-    precisions = list()
-    recalls = list()
+    precisions = []
+    recalls = []
 
     for ct in confidence_thresholds:
-        ct_pred = list()
+        ct_pred = []
         for i in range(len(confidence_scores)):
-            image_predictions = list()
+            image_predictions = []
             for s in range(confidence_scores[i].shape[0]):
                 if confidence_scores[i][s] >= ct:
                     image_predictions.append(all_prediction_boxes[i][s])
-            ct_pred.append(np.array(image_predictions))
 
-        precision, recall = calculate_precision_recall_all_images(ct_pred, all_gt_boxes, iou_threshold)
-        precisions.append(precisions)
-        recalls.append(recall)
+            ct_pred.append(image_predictions)
 
-    return np.array(precisions), np.array(recalls)
+        p, r = calculate_precision_recall_all_images(ct_pred, all_gt_boxes, iou_threshold)
+
+        precisions = np.append(precisions, p)
+        recalls = np.append(recalls, r)
+
+    return precisions, recalls
 
 
 def plot_precision_recall_curve(precisions, recalls):
@@ -245,7 +247,17 @@ def calculate_mean_average_precision(precisions, recalls):
     # Calculate the mean average precision given these recall levels.
     recall_levels = np.linspace(0, 1.0, 11)
     # YOUR CODE HERE
+
     average_precision = 0
+
+    for i, rl in enumerate(recall_levels):
+        p_max = 0
+        for i, r in enumerate(recalls):
+            if precisions[i] > p_max and r >= rl:
+                p_max = precisions[i]
+        average_precision += p_max
+
+    average_precision = average_precision / len(recall_levels)
     return average_precision
 
 
