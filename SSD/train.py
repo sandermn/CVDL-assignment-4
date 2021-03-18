@@ -4,7 +4,11 @@ import torch
 import pathlib
 import numpy as np
 from ssd.engine.inference import do_evaluation
+
+# change for each subtask
 from ssd.config.defaults import cfg
+#from ssd.config.task4c import cfg
+
 from ssd.data.build import make_data_loader
 from ssd.engine.trainer import do_train
 from ssd.modeling.detector import SSDDetector
@@ -35,11 +39,23 @@ def start_train(cfg):
     model = SSDDetector(cfg)
     model = torch_utils.to_cuda(model)
 
+    """
     optimizer = torch.optim.SGD(
         model.parameters(),
         lr=cfg.SOLVER.LR,
         momentum=cfg.SOLVER.MOMENTUM,
         weight_decay=cfg.SOLVER.WEIGHT_DECAY
+    )
+    """
+    
+    # new optimizer for task4c
+    optimizer = torch.optim.Adam(
+        params=model.parameters(), 
+        lr=cfg.SOLVER.LR, 
+        betas=(0.9, 0.999), 
+        eps=1e-08, 
+        weight_decay=cfg.SOLVER.WEIGHT_DECAY, 
+        amsgrad=False
     )
 
 
