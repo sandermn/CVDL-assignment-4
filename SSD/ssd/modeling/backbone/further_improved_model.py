@@ -36,62 +36,76 @@ class FurtherImprovedModel(torch.nn.Module):
             nn.Conv2d(in_channels=image_channels, out_channels=self.channels, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(num_features=self.channels),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.channels, out_channels=self.channels*2, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(num_features=self.channels*2),
             nn.MaxPool2d(kernel_size=2, stride=2),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.channels*2, out_channels=self.channels*2, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(num_features=self.channels*2),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.channels*2, out_channels=self.output_channels[0], kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(num_features=self.output_channels[0]),
         )
 
         self.conv2 = nn.Sequential(
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.output_channels[0], out_channels=self.channels*4, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(num_features=self.channels*4),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.channels*4, out_channels=self.output_channels[1], kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(num_features=self.output_channels[1])
         )
 
         self.conv3 = nn.Sequential(
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.output_channels[1], out_channels=self.channels*8, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(num_features=self.channels*8),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.channels*8, out_channels=self.output_channels[2], kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(num_features=self.output_channels[2]),
         )
         
         self.conv4 = nn.Sequential(
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.output_channels[2], out_channels=self.channels*4, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(num_features=self.channels*4),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.channels*4, out_channels=self.output_channels[3], kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(num_features=self.output_channels[3])
         )
 
         self.conv5 = nn.Sequential(
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.output_channels[3], out_channels=self.channels*4, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(num_features=self.channels*4),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.channels*4, out_channels=self.output_channels[4], kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(num_features=self.output_channels[4])
         )
 
         self.conv6 = nn.Sequential(
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.output_channels[4], out_channels=self.channels*4, kernel_size=3, stride=1, padding=1),
             nn.BatchNorm2d(num_features=self.channels*4),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
+            nn.Dropout2d(p=0.2),
             nn.Conv2d(in_channels=self.channels*4, out_channels=self.output_channels[5], kernel_size=3, stride=1, padding=0),
             nn.BatchNorm2d(num_features=self.output_channels[5])
         )
+        
 
 
     def forward(self, x):
